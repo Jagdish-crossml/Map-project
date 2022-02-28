@@ -1,0 +1,100 @@
+.logo-main {
+    position: absolute;
+    width: 120px;
+    height: 47px;
+    left: 0px;
+    top: 5px;
+}
+
+.logo-block-cities {
+    position: absolute;
+    width: 181px;
+    height: 52px;
+    left: 88px;
+    top: 0px;
+}
+.padding-bottom-2 {
+    padding-bottom: 2px;
+}
+.navbar-item {
+    width: 100px;
+    padding: 0 10px;
+}
+.navbar-item.active {
+    border-bottom: 2px solid #5756b3;
+}
+.navbar-menu {
+    /* Auto Layout */
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 564px;
+    height: 24px;
+}
+
+.navbar-tab {
+    position: absolute;
+    left: 61.2%;
+    right: 33.28%;
+    top: 95%;
+    bottom: 0%;
+
+    background: #5756b3;
+}
+
+.navbar-profile {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    right: 110px;
+    top: calc(50% - 24px / 2);
+}
+
+.navbar-option {
+    /* Option */
+
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    right: 60px;
+    top: calc(50% - 24px / 2);
+}
+
+.navbar-option-icon {
+    /* Icon */
+
+    position: absolute;
+    width: 16px;
+    right: 4px;
+    top: 8.33%;
+    bottom: 4.17%;
+
+    background: #a1a3d4;
+}
+
+.navbar-profile-icon {
+    position: absolute;
+    width: 16px;
+    right: 4px;
+    top: 8.33%;
+    bottom: 4.17%;
+
+    background: #a1a3d4;
+}
+
+.has-search .form-control {
+    padding-left: 2.375rem;
+}
+
+.has-search .form-control-feedback {
+    position: absolute;
+    z-index: 2;
+    display: block;
+    width: 2.375rem;
+    height: 2.375rem;
+    line-height: 2.375rem;
+    text-align: center;
+    pointer-events: none;
+    color: #aaa;
+}

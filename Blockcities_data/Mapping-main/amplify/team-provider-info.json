@@ -1,0 +1,15 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-blockcities-dev-180551-authRole",
+      "UnauthRoleArn": "arn:aws:iam::560136408966:role/amplify-blockcities-dev-180551-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::560136408966:role/amplify-blockcities-dev-180551-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-blockcities-dev-180551-deployment",
+      "UnauthRoleName": "amplify-blockcities-dev-180551-unauthRole",
+      "StackName": "amplify-blockcities-dev-180551",
+      "StackId": "arn:aws:cloudformation:us-east-1:560136408966:stack/amplify-blockcities-dev-180551/1e5bfe90-a29e-11eb-87e2-12e346dd5d0c",
+      "AmplifyAppId": "d2hoj0chbi40b8"
+    }
+  }
+}

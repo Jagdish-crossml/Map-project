@@ -1,0 +1,396 @@
+<div id='mapEl' class="app-main"></div>
+<!-- *ngIf="rentalPropertyAvailable" -->
+
+<div class="alert alert-warning position-absolute bottom-0 start-50 translate-middle-x" role="alert" *ngIf="showMapAlert">
+    Please click on the map to view data
+  </div>
+  
+
+<div id="data-container">
+
+    <div id="nav-card">
+       
+        <div id="country-details" class="" *ngIf="rentalPropertyAvailable">
+            <h5 class="col-12 text-left text-white text-truncate" *ngIf="rentalPropertyAvailable">{{this.city}}</h5>
+            <h6 class="col-12 text-left text-white text-truncate" *ngIf="rentalPropertyAvailable">{{this.state_name}}</h6>
+            <h6 class="col-12 text-left text-white text-truncate" >{{this.country}}</h6>
+        </div>
+
+        <div class="col-12 mt-4 text-center mobile-hide">
+        <div class="form-check form-switch form-check-inline">
+            <label class="form-check-label" for="flexSwitchCheckDefault"><h5>Grid</h5></label>
+            <input (change)="selectMapGrid($event)" class="form-check-input" type="checkbox" id="mapHexLayer" checked />
+          </div>
+          <!-- <div class="form-check form-switch form-check-inline">
+            <label class="form-check-label" for="flexSwitchCheckDefault"><h5>US States</h5></label>
+            <input (change)="selectMapState($event)" class="form-check-input" type="checkbox" id="mapStateLayer" checked />            
+          </div>         -->
+        </div>
+        <ul>
+            <!-- <label for="hexResolution" class="form-label"><b>Resolution:</b> <span id="rangeval">1</span></label>
+            <input value="1" (change)="changeResolution($event)" type="range" class="form-range" min="1" max="8" id="hexResolution" onInput="document.getElementById('rangeval').innerText = document.getElementById('hexResolution').value"> -->
+            <li class="align-middle " [ngClass]="tileAvailable ? 'btn-buy-tile': 'btn-clicked'" (click)="availableTile()">
+                <h5 class="my-1"><i
+                    class="bi bi-cart4"></i>&nbsp;&nbsp; Available Tiles</h5>
+            </li>
+            
+            <!-- <li class="align-middle " [ngClass]="showActiveTile ? 'btn-buy-tile': 'btn-clicked'" (click)="buyTile()">
+                <h5 class="my-1"><i
+                    class="bi bi-cart4"></i>&nbsp;&nbsp; Buy Tile</h5>
+            </li> -->
+
+            <li class="align-middle" [ngClass]="showSummary ? 'btn-normal': 'btn-clicked'" (click)="toggleSummary()">
+                <h5 class="my-1"><i
+                    class="bi bi-justify-left"></i>&nbsp;&nbsp; Summary</h5>
+            </li>
+
+            <li [ngClass]="showRental ? 'btn-normal': 'btn-clicked'" (click)="setRentalRate()" >
+                <h5 class="my-1"><i
+                    class="bi bi-geo-alt"></i>&nbsp;&nbsp; Rental Data</h5>
+            </li>
+            <!-- <li [ngClass]="showProForma ? 'btn-normal': 'btn-clicked'" (click)="toogleProForma()" >
+                <h5 class="my-1"><i class="bi bi-grid-fill "></i>&nbsp;&nbsp; Pro Forma</h5>
+            </li>
+            <li  [ngClass]="showHeatMap ? 'btn-normal': 'btn-clicked'" (click)="toogleHeatMap()" >
+                <h5 class="my-1"><i class="bi bi-grid-fill"></i>&nbsp;&nbsp; Heatmap</h5>
+            </li> -->
+            <!-- <li [ngClass]="showWalkability ? 'btn-normal': 'btn-clicked'" (click)="toggleWalkability()">
+                <h5 class="my-1"><i class="bi bi-person"></i>&nbsp;&nbsp; Walkability</h5>
+            </li> -->
+            <li class="btn-clicked">
+                <h5 class="my-1"><i class="bi bi-chevron-left"></i>&nbsp;&nbsp; Dashboard</h5>
+            </li>
+        </ul>
+    </div>
+
+    <div id="nav-card2" class="d-none">
+        <!-- <div id="country-details" class="" *ngIf="rentalPropertyAvailable">
+            <h5 class="col-12 text-left text-white text-truncate" *ngIf="rentalPropertyAvailable">{{this.city}}</h5>
+            <h6 class="col-12 text-left text-white text-truncate" *ngIf="rentalPropertyAvailable">{{this.state_name}}</h6>
+            <h6 class="col-12 text-left text-white text-truncate" >{{this.country}}</h6>
+        </div> -->
+           
+    <ul>
+
+            <li class="align-middle" [ngClass]="showSummary ? 'btn-normal': 'btn-clicked'" (click)="toggleSummary()">
+                <i class="bi bi-justify-left"></i>
+
+            <li [ngClass]="showRental ? 'btn-normal': 'btn-clicked'" (click)="setRentalRate()" >
+                <i class="bi bi-geo-alt"></i>
+            </li>
+            <li [ngClass]="showProForma ? 'btn-normal': 'btn-clicked'" (click)="toogleProForma()" >
+                <i class="bi bi-grid-fill "></i>
+            </li>
+            <li  [ngClass]="showHeatMap ? 'btn-normal': 'btn-clicked'" (click)="toogleHeatMap()" >
+                <i class="bi bi-grid-fill"></i>
+            </li>
+            <li [ngClass]="showWalkability ? 'btn-normal': 'btn-clicked'" (click)="toggleWalkability()">
+                <i class="bi bi-person"></i>
+            </li>
+        </ul>
+    </div>
+
+
+    <!-- <div class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner"> -->
+    <!-- <div *ngFor="let nft of nft_count; let isFirst = first"  [class.active]="isFirst" class="carousel-item" > -->
+        
+    <div *ngIf="tileAvailable && !showSummary" class="col-md-2 col-xs-12 px-5 py-4 " id="country-card">
+        
+        <div class="hex">
+            <div class="hex-background">
+                
+                <img id="nft-cover-img" src="../../../assets/images/nft-container.png">
+                
+                <img [src]="nftImage">
+            </div>
+        </div>
+        
+        <div class="text-center">
+
+        <h4 class="text-center my-2" *ngIf="city"><b>{{this.city}}, {{this.state_name}}</b></h4>
+        <h4 class="text-center my-2" *ngIf="!city"><b>Ocean Tile</b></h4>
+        <h5>
+            <img id="nft-logo" src="../../../assets/images/logo-small2.png" class="d-inline-block align-top text-center logo-main" alt="" />Virtual Land
+        </h5>
+        <h5 class="text-center my-2" *ngIf="activeNft.SOL"><b>SOL:</b>{{this.activeNft.SOL}}</h5>
+        <h6 class="text-center my-2" *ngIf="activeTile"><b>Tile Id:</b> {{this.activeTile}}</h6>
+        <button *ngIf="activeNft.Link" style="border-radius: 30px; color:#FFFFFF" class="align-middle btn " [ngClass]=" showActiveTile ? 'btn-buy-tile': 'btn-clicked'" (click)="buyTile()">
+            <h5 class="my-1"><i
+                class="bi bi-cart4"></i>&nbsp;&nbsp; Buy Tile</h5>
+            </button>
+        </div>
+</div>
+<!-- </div> -->
+<!-- </div>
+<button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+
+</div> -->
+
+    <div class="col-md-2 col-xs-12" id="country-card" *ngIf="!showMapAlert && (showSummary || showRental || showWalkability || showProForma)">
+        <div class="spinner-bg" id="" *ngIf="country_card_spinner">
+            <div class="spinner-border text-secondary loader" style="width: 5rem; height: 5rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+
+
+        <div *ngIf="!showMapAlert && showSummary">
+            <h5 class="col-10 offset-1 mt-4" >Country Summary</h5>
+            <h6 class="col-10 offset-1 mt-2"><i *ngIf="country" class="bi bi-geo-alt-fill"></i> {{this.country}}</h6>
+            
+            <div class="col-10 offset-1">
+
+                <!-- <select (change)="selectCountryHandler($event)" class="form-select" aria-label=""  value='US'>
+                    <optgroup>
+                        <option selected>Select Country</option>
+                        <option *ngFor="let option of countryList" [value]="option.Code" [selected]="option.Code === this.countryCode">
+                            {{option.Name}}
+                        </option>
+                    </optgroup>
+                </select> -->
+            </div>
+            <div class="m-4 mt-2" *ngIf="countryData">
+
+                <div class="card-data">
+                    <h6 class="m-2 text-muted text-truncate">Native Currency</h6>
+                    <h5 class="m-2">{{this.countryData.native_currency}}</h5>
+                </div>
+                <div class="card-data ">
+                    <h6 class="m-2 text-muted text-truncate">President</h6>
+                    <h5 class="m-2">{{this.countryData.president}}</h5>
+                </div>
+                <div class="card-data">
+                    <h6 class="m-2 text-muted text-truncate">Total Area (in Sq. Km)</h6>
+                    <h5 class="m-2">{{this.countryData.total_area_sq_km}}</h5>
+                </div>
+                <div class="card-data">
+                    <h6 class="m-2 text-muted text-truncate">Capital</h6>
+                    <h5 class="m-2">{{this.countryData.capital}}</h5>
+                </div>
+
+                <div class="card-data d-none d-sm-block d-md-none d-lg-none">
+                    <h6 class="m-2 text-muted text-truncate">Total Area (in Sq. Km)</h6>
+                    <h5 class="m-2">{{this.countryData.total_area_sq_km}}</h5>
+                </div>
+                <div class="card-data d-none d-sm-block d-md-none d-lg-none">
+                    <h6 class="m-2 text-muted text-truncate">Capital</h6>
+                    <h5 class="m-2">{{this.countryData.capital}}</h5>
+                </div>
+                <div class="card-data d-none d-sm-block d-md-none d-lg-none">
+                    <h6 class="m-2 text-muted text-truncate">Imports</h6>
+
+                    <h5 class="m-2">{{this.countryData.imports}}</h5>
+                </div>
+                <div class="card-data d-none d-sm-block d-md-none d-lg-none">
+                    <h6 class="m-2 text-muted text-truncate">Exports</h6>
+                    <h5 class="m-2">{{this.countryData.exports}}</h5>
+                </div>
+                <div class="card-data">
+                    <h6 class="m-2 text-muted text-truncate">Imports</h6>
+
+                    <h5 class="m-2">{{this.countryData.imports}}</h5>
+                </div>
+                <div class="card-data">
+                    <h6 class="m-2 text-muted text-truncate">Exports</h6>
+                    <h5 class="m-2">{{this.countryData.exports}}</h5>
+                </div>
+
+            </div>
+        </div>
+        
+        <div *ngIf="!showMapAlert && showProForma">
+            <h5 class="col-10 offset-1 my-4">Pro Forma</h5>
+            <h6 class="col-10 offset-1 mt-2"><i *ngIf="city" class="bi bi-geo-alt-fill"></i> {{this.city}}</h6>
+
+
+            <div class="m-4 mt-2" *ngIf="showProForma">
+
+                <div class="card-data">
+                    <h6 class="m-2 text-muted ">Tradition Short Term ROI</h6>
+                    <h5 class="m-2">{{this.roi_long| DecimalPipe:'1.2-2'}}</h5>
+                </div>
+                <div class="card-data ">
+                    <h6 class="m-2 text-muted ">Tradition Long Term ROI</h6>
+                    <h5 class="m-2">{{this.roi_short| DecimalPipe:'1.2-2'}}</h5>
+                </div>
+                <div class="card-data ">
+                    <h6 class="m-2 text-muted text-truncate">Airbnb Short Term ROI</h6>
+                    <h5 class="m-2">{{this.airbnb_roi_short| DecimalPipe:'1.2-2'}}</h5>
+                </div>
+                <div class="card-data ">
+                    <h6 class="m-2 text-muted text-truncate">Airbnb Long Term ROI</h6>
+                    <h5 class="m-2">{{this.airbnb_roi_long| DecimalPipe:'1.2-2'}}</h5>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="!showMapAlert && showRental">
+            <h5 class="col-10 offset-1 my-4">City Rentals</h5>
+            <h6 class="col-10 offset-1 mt-2"><i *ngIf="city" class="bi bi-geo-alt-fill"></i> {{this.city}}</h6>
+            <div class="m-4 mt-2" *ngIf="showRental">
+
+                <div class="card-data" *ngIf="cityData.avg_airbnb_rental">
+                    <h6 class="m-2 text-muted text-truncate">Average Airbnb Rental</h6>
+                    <h5 class="m-2">${{this.cityData.avg_airbnb_rental| DecimalPipe:'1.2-2'|number}}</h5>
+                </div>
+
+                <div class="card-data " *ngIf="cityData.avg_airbnb_roi || cityData.avg_airbnb_ROI" >
+                    <h6 class="m-2 text-muted text-truncate">Avg Airbnb ROI</h6>
+                    <h5 class="m-2" *ngIf="cityData.avg_airbnb_roi">{{this.cityData.avg_airbnb_roi| DecimalPipe:'1.2-2'}}%</h5>
+                    <h5 class="m-2" *ngIf="cityData.avg_airbnb_ROI">{{this.cityData.avg_airbnb_ROI| DecimalPipe:'1.2-2'}}%</h5>
+                </div>
+
+                <div class="card-data" *ngIf="cityData.avg_days_on_market">
+                    <h6 class="m-2 text-muted text-truncate">Avg Days on Market</h6>
+                    <h5 class="m-2">{{this.cityData.avg_days_on_market| DecimalPipe:'1.2-2'}}</h5>
+                </div>
+                <div class="card-data" *ngIf="cityData.avg_nightly_price">
+                    <h6 class="m-2 text-muted text-truncate">Avg Nightly Rate</h6>
+                    <h5 class="m-2">${{this.cityData.avg_nightly_price| DecimalPipe:'1.2-2'|number}}</h5>
+                </div>
+                <div class="card-data" *ngIf="cityData.avg_price_per_sqft">
+                    <h6 class="m-2 text-muted text-truncate">Avg Price Per Sqft</h6>
+
+                    <h5 class="m-2">${{this.cityData.avg_price_per_sqft| DecimalPipe:'1.2-2'}}</h5>
+                </div>
+                <div class="card-data" *ngIf="cityData.avg_property_price">
+                    <h6 class="m-2 text-muted text-truncate">Avg Property Price</h6>
+                    <h5 class="m-2">${{this.cityData.avg_property_price| DecimalPipe:'1.2-2'|number}}</h5>
+                </div>
+                <div class="card-data" *ngIf="cityData.avg_traditional_rental">
+                    <h6 class="m-2 text-muted text-truncate">Avg Traditional Rental</h6>
+                    <h5 class="m-2">${{this.cityData.avg_traditional_rental| DecimalPipe:'1.2-2' | number}}</h5>
+                </div>
+                <div class="card-data" *ngIf="cityData.avg_traditional_roi || cityData.avg_traditional_ROI">
+                    <h6 class="m-2 text-muted text-truncate">Avg Traditional ROI</h6>
+                    <h5 class="m-2" *ngIf="cityData.avg_traditional_ROI">{{this.cityData.avg_traditional_ROI| DecimalPipe:'1.2-2'}}%</h5>
+                    <h5 class="m-2" *ngIf="cityData.avg_traditional_roi">{{this.cityData.avg_traditional_roi| DecimalPipe:'1.2-2'}}%</h5>
+                </div>
+
+            </div>
+
+        </div>
+        <div *ngIf="!showMapAlert && showWalkability">
+            <h5 class="col-10 offset-1 my-4">Walkability</h5>
+
+
+            <div class="m-4 mt-2" >
+
+                <div class="card-data">
+                    <h6 class="m-2 text-muted text-truncate">Walkscore</h6>
+                    <h5 class="m-2">{{this.walkabilityData.walkscore}}</h5>
+                </div>
+                <div class="card-data ">
+                    <h6 class="m-2 text-muted text-truncate">Transit score</h6>
+                    <h5 class="m-2">{{this.walkabilityData.walkscore}}</h5>
+                </div>
+                <div class="card-data">
+                    <h6 class="m-2 text-muted text-truncate">Bike score</h6>
+                    <h5 class="m-2">{{this.walkabilityData.walkscore}}</h5>
+                </div>
+                <div class="card-data">
+                    <h6 class="m-2 text-muted text-truncate">h3_resolution</h6>
+                    <h5 class="m-2">{{this.walkabilityData.h3_resolution}}</h5>
+                </div>
+                <div class="card-data">
+                    <h6 class="m-2 text-muted text-truncate">Snapped Lat</h6>
+
+                    <h5 class="m-2">{{this.walkabilityData.snapped_lat}}</h5>
+                </div>
+                <div class="card-data">
+                    <h6 class="m-2 text-muted text-truncate">snapped Lng</h6>
+                    <h5 class="m-2">{{this.walkabilityData.snapped_lon}}</h5>
+                </div>
+            
+            </div>
+
+        </div>        
+    </div>
+    <div id="country-info-container" class="mobile-hide" *ngIf="showSummary && !showMapAlert && countryData" >
+        <div class="country-info" *ngIf="countryData.coastline">
+
+            <i class="col-2 my-2 offset-1 bi bi-water"></i>
+            <div class="col-7 offset-1  pull-left ">
+
+                <h5 class="w-100 mt-2 pull-left">{{this.countryData.coastline}}</h5>
+                <h6 class="w-100 text-muted pull-left">Coastline</h6>
+            </div>
+        </div>
+
+
+        <div class="country-info" *ngIf="countryData.per_capital_income">
+            <i class="col-2 my-2 offset-1 bi bi-bank"></i>
+            <div class="col-7 offset-1  pull-left ">
+                <h5 class="w-100  mt-2 pull-left">{{this.countryData.per_capital_income}}</h5>
+                <h6 class="text-muted pull-left">Per Capita Income
+
+                </h6>
+
+            </div>
+        </div>
+        <div class="country-info" *ngIf="countryData.gdp">
+            <i class="col-2 my-2 offset-1 bi bi-graph-up"></i>
+            <div class="col-7 offset-1  pull-left ">
+                <h5 class="w-100  mt-2 pull-left text-truncate">{{this.countryData.gdp}}</h5>
+                <h6 class="w-100 text-muted  pull-left">GDP 
+                    <!-- <span class="pull-right" style="color:#3BBD91">+2.5%</span> -->
+                </h6>
+            </div>
+        </div>
+        <div class="country-info" *ngIf="countryData.population">
+            <i class="col-2 my-2 offset-1 bi bi-people-fill"></i>
+            <div class="col-7 offset-1 pull-left">
+                <h5 class="w-100  mt-2 pull-left">{{this.countryData.population}}</h5>
+                <h6 class="w-100 text-muted  pull-left">Population
+                    <!-- <span class="pull-right " style="color:#3BBD91">+0.25%</span> -->
+                </h6>
+            </div>
+        </div>
+    </div>
+
+    <div id="country-info-container" class="mobile-hide" *ngIf="showRental && !showMapAlert">
+        <div class="country-info" *ngIf="cityData.active_neighborhoods">
+            <i class="col-2 my-2 offset-1 bi bi-lightning"></i>
+            <div class="col-7 offset-1  pull-left ">
+
+                <h5 class="w-100 mt-2 pull-left">{{this.cityData.active_neighborhoods}}</h5>
+                <h6 class="w-100 text-muted pull-left">Active Neighborhoods</h6>
+            </div>
+        </div>
+
+
+        <div class="country-info" *ngIf="cityData.traditional_listings">
+            <i class="col-2 my-2 offset-1 bi bi-house-door"></i>
+            <div class="col-7 offset-1  pull-left ">
+                <h5 class="w-100 mt-2 pull-left">{{this.cityData.traditional_listings}}</h5>
+                <h6 class="w-100 text-muted pull-left">Traditional Listings
+
+                </h6>
+
+            </div>
+        </div>
+        <div class="country-info" *ngIf="cityData.investment_properties">
+            <i class="col-2 my-2 offset-1 bi bi-graph-up"></i>
+            <div class="col-7 offset-1  pull-left ">
+                <h5 class="w-100 mt-2 pull-left text-truncate">{{this.cityData.investment_properties}}</h5>
+                <h6 class="w-100 text-muted  pull-left">Investment Properties</h6>
+            </div>
+        </div>
+        <div class="country-info" *ngIf="cityData.airbnb_listings">
+            <i class="col-2 my-2 offset-1 bi bi-building"></i>
+            <div class="col-7 offset-1 pull-left">
+                <h5 class="w-100  mt-2 pull-left">{{this.cityData.airbnb_listings}}</h5>
+                <h6 class="w-100 text-muted  pull-left">Airbnb Listings
+                    <span class="pull-right " style="color:#3BBD91">+0.25%</span>
+                </h6>
+            </div>
+        </div>
+    </div>
+
